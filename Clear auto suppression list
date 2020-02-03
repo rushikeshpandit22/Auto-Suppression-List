@@ -1,0 +1,23 @@
+<script type="javascript" runat="server">
+Platform.Load("core", "1");
+
+var prox = new Script.Util.WSProxy();
+var res;
+var autoSupListDE = '3419F062-C4E5-4CCE-A515-0749469BDA8C'
+
+function clearAutoSuppressionList(){
+    var action = 'ClearData';
+    var options = {};
+    var props = {
+        CustomerKey:<Customer Key of auto suppression list> 
+    };
+    var res = prox.performItem("DataExtension",props,action,options);
+    Write('result=\n'+res);
+}
+
+function main(){
+  clearAutoSuppressionList();
+}
+
+main();
+</script>
