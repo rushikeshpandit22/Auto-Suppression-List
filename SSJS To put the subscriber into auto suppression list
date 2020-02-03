@@ -1,0 +1,37 @@
+<script runat="server">
+
+  Platform.Load("Core","1.1.1");
+
+function addDataToAutoSuppressionList(){
+     var rr = Platform.Function.CreateObject("RetrieveRequest");
+        Platform.Function.SetObjectProperty(rr, "ObjectType", "DataExtensionObject[ Your External key of DE ]");
+        Platform.Function.AddObjectArrayItem(rr, "Properties", "Email"); 
+
+
+        var rows = Platform.Function.InvokeRetrieve(rr, results);
+
+        do{ 
+            var results = [0,0];
+            var rows = Platform.Function.InvokeRetrieve(rr, results);
+            var runstatus = results[0];
+            var requestId = results[1];
+
+           if (rows != null) {
+                for (var i in rows) {
+                  var oneRecord = Stringify(rows[i]);
+                  var strRecord = Platform.Function.ParseJSON(oneRecord);
+                  var EmailAddress = strRecord.Properties[0].Value;
+                  Platform.Function.InsertData("Auto-Suppression-list",["Email Address"],[EmailAddress]);
+                } 
+            } 
+            rr.ContinueRequest = requestId;
+        } while (runstatus == "MoreDataAvailable")
+ 
+}
+    
+ function main(){
+ 
+ addDataToAutoSuppressionList();
+} 
+main();
+</script>
